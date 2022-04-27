@@ -34,4 +34,8 @@ public class Project {
   public List<Sequence> getSequences() {
     return sequences;
   }
+
+  public void addSequence(Sequence seq) {
+    sequences.add(seq);
+  }
 }

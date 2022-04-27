@@ -37,8 +37,18 @@ public class IOUtil {
     try {
       file = new File(resource.toURI());
     } catch (URISyntaxException ex) {
-      Logger.getLogger(IOUtil.class.getName()).log(Level.SEVERE, null, "Error Opening File : " + fileName);
+      Logger.getLogger(IOUtil.class.getName()).log(Level.SEVERE, "Error Opening File : {0}", fileName);
     }
     return file;
+  }
+
+  public static boolean isFileInDirectory(File f, File directory) {
+    while (f.getParent() != null) {
+      f = new File(f.getParent());
+      if (f.equals(directory)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

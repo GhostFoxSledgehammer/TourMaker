@@ -53,50 +53,32 @@ public class IOExport {
         Element sequenceElement = doc.createElement("Sequence");
         sequenceElement.setAttribute("id", Integer.toString(i));
 
-        Element sequenceNameElement = doc.createElement("Name");
-        sequenceNameElement.appendChild(doc.createTextNode(seq.getName()));
-        sequenceElement.appendChild(sequenceNameElement);
+        sequenceElement.setAttribute("name", seq.getName());
 
         for (int j = 0; j < seq.getNodes().size(); j++) {
           Node node = seq.getNodes().get(j);
 
-          Element nodeElement = doc.createElement("Sequence");
-          sequenceElement.setAttribute("id", Integer.toString(j));
-
-          Element nodeNameElement = doc.createElement("Name");
-          nodeNameElement.appendChild(doc.createTextNode(node.getImageName()));
-          nodeElement.appendChild(nodeNameElement);
+          Element nodeElement = doc.createElement("Node");
+          nodeElement.setAttribute("id", Integer.toString(j));
+          
+          nodeElement.setAttribute("name", node.getName());
 
           Element nodePosElement = doc.createElement("Position");
 
-          Element xCoordinateElement = doc.createElement("xCoordinate");
-          xCoordinateElement.appendChild(doc.createTextNode(String.format("%.2f", node.getPosition().x)));
-          nodePosElement.appendChild(xCoordinateElement);
-
-          Element yCoordinateElement = doc.createElement("yCoordinate");
-          yCoordinateElement.appendChild(doc.createTextNode(String.format("%.2f", node.getPosition().y)));
-          nodePosElement.appendChild(yCoordinateElement);
+          nodePosElement.setAttribute("xCoordinate", String.format("%.2f", node.getPosition().x));
+          
+          nodePosElement.setAttribute("yCoordinate", String.format("%.2f", node.getPosition().y));
 
           nodeElement.appendChild(nodePosElement);
 
+          nodeElement.setAttribute("imageName", node.getImageName());
           for (Hotspot hotspot : node.getHostspots()) {
             Element hotspotElement = doc.createElement("Hotspot");
 
-            Element azimuthalElement = doc.createElement("Azimuthal");
-            azimuthalElement.appendChild(doc.createTextNode(String.format("%.2f", hotspot.azimuthal)));
-            hotspotElement.appendChild(azimuthalElement);
-
-            Element polarElement = doc.createElement("Polar");
-            polarElement.appendChild(doc.createTextNode(String.format("%.2f", hotspot.polar)));
-            hotspotElement.appendChild(polarElement);
-
-            Element typeElement = doc.createElement("Type");
-            typeElement.appendChild(doc.createTextNode(hotspot.getType().name()));
-            hotspotElement.appendChild(typeElement);
-
-            Element valueElement = doc.createElement("Value");
-            valueElement.appendChild(doc.createTextNode(hotspot.getValue()));
-            hotspotElement.appendChild(valueElement);
+            hotspotElement.setAttribute("azimuthal", String.format("%.2f", hotspot.azimuthal));
+            hotspotElement.setAttribute("polar", String.format("%.2f", hotspot.polar));
+            hotspotElement.setAttribute("type", hotspot.getType().name());
+            hotspotElement.setAttribute("value", hotspot.getValue());
 
             nodeElement.appendChild(hotspotElement);
           }

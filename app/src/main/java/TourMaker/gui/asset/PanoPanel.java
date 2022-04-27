@@ -4,6 +4,7 @@ package TourMaker.gui.asset;
 import TourMaker.data.AssetType;
 import TourMaker.gui.MainScreen;
 import TourMaker.util.AssetUtil;
+import TourMaker.util.IOImport;
 import TourMaker.util.Utils;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -28,7 +29,7 @@ import net.coobird.thumbnailator.Thumbnails;
  * @author Kishan Tripathi
  */
 public class PanoPanel extends AssetPanel {
-  
+
   private ImageIcon thumbnail = new ImageIcon("Thumbnail");
 
   public PanoPanel() {
@@ -49,7 +50,7 @@ public class PanoPanel extends AssetPanel {
 
     @Override
     public AssetType assetType() {
-      return AssetType.Image;
+      return AssetType.Panorama;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class PanoPanel extends AssetPanel {
       int response = jfc.showDialog(this, "Import Images");
       if (response == JFileChooser.APPROVE_OPTION) {
         File imageFile = jfc.getSelectedFile();
-        File copiedFile = AssetUtil.copyFile(imageFile, AssetType.Image);
+        File copiedFile = IOImport.copyFile(imageFile, assetType());
         if (copiedFile != null) {
           asset = copiedFile;
           BufferedImage temp = null;
@@ -88,6 +89,8 @@ public class PanoPanel extends AssetPanel {
 
     @Override
     public void deleteAsset() {
+      deleteAssetCard(this);
+      AssetUtil.deleteAsset(asset);
     }
 
     @Override
@@ -128,7 +131,6 @@ public class PanoPanel extends AssetPanel {
       JLabel thumbnailLabel = new JLabel(thumbnail);
       add(thumbnailLabel, gbc);
 
-      
       gbc.fill = GridBagConstraints.NONE;
       gbc.gridwidth = 1;
       gbc.gridy = 2;

@@ -100,11 +100,12 @@ public class IOImport {
             Node nodeItem = nodeList.item(j);
             if (nodeItem.getNodeType() == Node.ELEMENT_NODE) {
               TourMaker.data.Node node;
-              String nodeName, nodeId;
+              String nodeName, nodeId, nodeImageName;
               double xCoord = 0, yCoord = 0;
               Element nodeElement = (Element) nodeItem;
               nodeId = nodeElement.getAttribute("id");
               nodeName = nodeElement.getAttribute("name");
+              nodeImageName = nodeElement.getAttribute("imageName");
               NodeList positionList = nodeElement.getElementsByTagName("Position");
               if (positionList.getLength() > 0) {
                 Node postionNode = positionList.item(0);
@@ -116,7 +117,7 @@ public class IOImport {
                   yCoord = Double.parseDouble(yString);
                 }
               }
-              node = new TourMaker.data.Node(new Point(xCoord, yCoord), nodeName);
+              node = new TourMaker.data.Node(new Point(xCoord, yCoord), nodeName, nodeImageName);
 
               NodeList hotspotList = nodeElement.getElementsByTagName("Hotspot");
               for (int k = 0; k < hotspotList.getLength(); k++) {

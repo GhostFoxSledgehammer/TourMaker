@@ -2,13 +2,9 @@
 package TourMaker.util;
 
 import TourMaker.AppState;
-import TourMaker.data.AssetType;
-import TourMaker.gui.MainScreen;
 import java.io.File;
-import java.io.IOException;
-import javax.swing.JOptionPane;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,26 +18,17 @@ public class AssetUtil {
   private AssetUtil() {
   }
 
-  public static File copyFile(File orignal, AssetType type) {
-    String projectDir = AppState.getCurrentProject().dir();
-    String assetDir = projectDir.concat("/").concat(type.name());
-    String fileName = orignal.getName();
-    String fileNameWithOutExt = FilenameUtils.removeExtension(fileName);
-    String fileExt = FilenameUtils.getExtension(fileName);
-    int index = 0;
-    File destination = new File(assetDir.concat("/").concat(fileName));
-    while (destination.exists()) {
-      destination = new File(assetDir.concat("/").concat(fileNameWithOutExt).concat(index + ".").concat(fileExt));
-      index++;
+  public static boolean deleteAsset(File asset) {
+    if (asset == null) {
+      throw new IllegalArgumentException("File cannot be null");
     }
-    try {
-      FileUtils.copyFile(orignal, destination);
-      return destination;
-    } catch (IOException e) {
-      String message = "Error copying file : " + orignal.getAbsolutePath();
-      JOptionPane.showMessageDialog(MainScreen.getInstance(), message, "IO Error",
-      JOptionPane.ERROR_MESSAGE);
+    if (!asset.exists()) {
+      return false;
     }
-    return null;
+    if (!IOUtil.isFileInDirectory(asset, new File(AppState.getCurrentProject().dir()))) {
+      Logger.getLogger(IOUtil.class.getName()).log(Level.SEVERE, "File not in project directory : {0}", asset.getAbsolutePath());
+      return false;
+    }
+    return asset.delete();
   }
 }

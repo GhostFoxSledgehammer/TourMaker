@@ -4,6 +4,7 @@ package TourMaker.gui.asset;
 import TourMaker.data.AssetType;
 import TourMaker.gui.MainScreen;
 import TourMaker.util.AssetUtil;
+import TourMaker.util.IOImport;
 import TourMaker.util.Utils;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -64,7 +65,7 @@ public class ImagePanel extends AssetPanel {
       int response = jfc.showDialog(this, "Import Images");
       if (response == JFileChooser.APPROVE_OPTION) {
         File imageFile = jfc.getSelectedFile();
-        File copiedFile = AssetUtil.copyFile(imageFile, AssetType.Image);
+        File copiedFile = IOImport.copyFile(imageFile, assetType());
         if (copiedFile != null) {
           asset = copiedFile;
           BufferedImage temp = null;
@@ -88,6 +89,8 @@ public class ImagePanel extends AssetPanel {
 
     @Override
     public void deleteAsset() {
+      deleteAssetCard(this);
+      AssetUtil.deleteAsset(asset);
     }
 
     @Override
@@ -97,7 +100,7 @@ public class ImagePanel extends AssetPanel {
       int hieght = (int) (screenSize.getWidth() * 0.5);
       try {
         BufferedImage temp = Thumbnails.of(asset).size(width, hieght).asBufferedImage();
-        JDialog dialog = new JDialog();
+        JDialog dialog = new JDialog(MainScreen.getInstance(), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.setTitle(asset.getName());
         dialog.add(new JLabel(new ImageIcon(temp)));

@@ -1,13 +1,14 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui;
 
+import TourMaker.AppState;
 import static TourMaker.util.Utils.exit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,17 +32,18 @@ public class MainMenuBar extends JMenuBar {
     helpMenu = new JMenu("Help");
     newProject = new JMenuItem("New Project");
     newProject.addActionListener((ActionEvent e) -> {
-      JDialog jd = new JDialog(MainScreen.getInstance(), "New Project", true);
-      CreateProject createProject = new CreateProject(jd);
-      jd.add(createProject);
-      jd.pack();
-      jd.setLocationRelativeTo(MainScreen.getInstance());
-      jd.setVisible(true);
+      AppState.newProject();
     });
     openFile = new JMenuItem("Open File");
     openProject = new JMenuItem("Open Project");
+    openProject.addActionListener((ActionEvent e) -> {
+      AppState.openProject();
+    });
     closeProject = new JMenuItem("Close Project");
     saveProject = new JMenuItem("Save");
+    saveProject.addActionListener((ActionEvent e) -> {
+      AppState.save();
+    });
     saveAsProject = new JMenuItem("Save As...");
     exit = new JMenuItem("Exit");
     exit.addActionListener((ActionEvent e) -> {

@@ -24,4 +24,8 @@ public class Sequence {
   public List<Node> getNodes() {
     return nodes;
   }
+  
+  public void addNode(Node node) {
+    nodes.add(node);
+  }
 }
