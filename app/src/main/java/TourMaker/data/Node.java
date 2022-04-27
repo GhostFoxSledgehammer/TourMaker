@@ -13,8 +13,8 @@ import java.util.List;
 public class Node {
 
   private Point pos;
-  private String imageName;
-  private List<Hotspot> hotspots;
+  private final String imageName;
+  private final List<Hotspot> hotspots;
 
   public Node(Point p, String name) {
     pos = p;

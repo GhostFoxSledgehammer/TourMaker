@@ -3,18 +3,14 @@
  */
 package TourMaker;
 
-import TourMaker.gui.CreateProject;
 import TourMaker.gui.MainScreen;
-import javax.swing.JDialog;
-import javax.swing.UIManager;
+import TourMaker.util.LAFUtil;
 
 public class App {
 
   public static void main(String[] args) {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception e) {
-    }
+    LAFUtil.initialize();
+    
     MainScreen.getInstance();
   }
 }

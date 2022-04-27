@@ -1,6 +1,9 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui;
 
+import TourMaker.AppState;
+import TourMaker.AppStateListener;
+import TourMaker.data.Project;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -9,7 +12,7 @@ import javax.swing.JMenuBar;
  *
  * @author Kishan Tripathi
  */
-public class MainScreen extends JFrame {
+public class MainScreen extends JFrame implements AppStateListener {
 
   private static MainScreen instance;
   private final JMenuBar menuBar;
@@ -20,16 +23,18 @@ public class MainScreen extends JFrame {
     setTitle(APP_NAME);
     menuBar = new MainMenuBar();
     setJMenuBar(menuBar);
-    
+
     setLayout(new BorderLayout());
-    
+
     mainPanel = new MainPanel();
     add(mainPanel, BorderLayout.CENTER);
-    
+
     pack();
     setVisible(true);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    AppState.addListener(this);
   }
 
   public static MainScreen getInstance() {
@@ -38,8 +43,9 @@ public class MainScreen extends JFrame {
     }
     return instance;
   }
-  
-  public MainPanel mainPanel() {
-    return mainPanel;
+
+  @Override
+  public void stateChanged(Project newProject) {
+    mainPanel.displayProjectScreen();
   }
 }

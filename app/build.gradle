@@ -11,6 +11,9 @@ plugins {
     id 'application'
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -22,6 +25,15 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
+
+    implementation 'com.formdev:flatlaf:2.1'
+
+    implementation 'commons-io:commons-io:2.11.0'
+
+    // https://mvnrepository.com/artifact/net.coobird/thumbnailator
+    implementation 'net.coobird:thumbnailator:0.4.17'
+
+implementation 'com.formdev:flatlaf-extras:2.1'
 }
 
 application {

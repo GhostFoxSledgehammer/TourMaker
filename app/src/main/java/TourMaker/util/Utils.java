@@ -47,19 +47,19 @@ public class Utils {
   }
 
   public static List<FileFilter> getFilterList(AssetType type) {
-    return switch (type) {
-      case Panorama ->
-        imageFilter;
-      case Image ->
-        imageFilter;
-      case Video ->
-        videoFilter;
-      case Audio ->
-        audioFilter;
-      case Pdf ->
-        pdfFilter;
-      default ->
-        null;
-    };
+    switch (type) {
+      case Panorama:
+        return imageFilter;
+      case Image:
+        return imageFilter;
+      case Video:
+        return videoFilter;
+      case Audio:
+        return audioFilter;
+      case Pdf:
+        return pdfFilter;
+      default:
+        return null;
+    }
   }
 }

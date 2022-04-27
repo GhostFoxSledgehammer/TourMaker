@@ -2,8 +2,13 @@
 package TourMaker.util;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
  *
@@ -23,7 +28,13 @@ public class ImageUtil {
     return new ImageIcon(resizedImage);
   }
   
-  public static Icon createIcon(Image img,  int width, int height) {
+  public static Icon createIcon(BufferedImage img,  int width, int height) {
+    try {
+      BufferedImage thumbnail = Thumbnails.of(img).size(width, height).asBufferedImage();
+      return new ImageIcon(thumbnail);
+    } catch (IOException ex) {
+      Logger.getLogger(ImageUtil.class.getName()).log(Level.SEVERE, null, ex);
+    }
     Image resizedImage = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
     return new ImageIcon(resizedImage);
   }

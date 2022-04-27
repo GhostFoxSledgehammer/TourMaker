@@ -1,6 +1,8 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui;
 
+import TourMaker.gui.asset.ImagePanel;
+import TourMaker.gui.asset.PanoPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -24,9 +26,9 @@ public class ProjectPanel extends JPanel {
   public ProjectPanel() {
     leftPane = new JTabbedPane(JTabbedPane.LEFT, JTabbedPane.SCROLL_TAB_LAYOUT);
 
-    panoramaPanel = new JPanel();
+    panoramaPanel = new PanoPanel();
     hotspotPanel = new JPanel();
-    imagePanel = new JPanel();
+    imagePanel = new ImagePanel();
     videoPanel = new JPanel();
     audioPanel = new JPanel();
     pdfPanel = new JPanel();
