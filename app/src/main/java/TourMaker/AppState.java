@@ -1,9 +1,11 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker;
 
+import TourMaker.data.AssetType;
 import TourMaker.data.Project;
 import TourMaker.gui.CreateProject;
 import TourMaker.gui.MainScreen;
+import static TourMaker.util.AssetUtil.loadAllAsssets;
 import TourMaker.util.IOExport;
 import TourMaker.util.IOImport;
 import java.io.File;
@@ -21,10 +23,22 @@ public class AppState {
 
   private static Project curProject;
 
-  private static final Integer lock = 1;
+  private static final Integer LOCK = 1;
+  private static final List<AppStateListener> stateListeners = new ArrayList();
+  private static final List<AssetListener> assetListeners = new ArrayList();
+
+  /**
+   * Private no-args constructor for ensuring against instantiation.
+   */
+  private AppState() {
+  }
+
+  public static Project getCurrentProject() {
+    return curProject;
+  }
 
   public static void save() {
-    synchronized (lock) {
+    synchronized (LOCK) {
       if (curProject != null) {
         IOExport.saveProject(curProject);
       }
@@ -32,7 +46,7 @@ public class AppState {
   }
 
   public static void openProject() {
-    Project project = null;
+    Project  project = null;
     JFileChooser fc = new JFileChooser();
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
     fc.setMultiSelectionEnabled(false);
@@ -47,6 +61,12 @@ public class AppState {
         return;
       }
       setCurrentProject(project);
+      new Thread() {
+        @Override
+        public void run() {
+          loadAllAsssets(getCurrentProject());
+        }
+      }.start();
     }
   }
 
@@ -59,37 +79,49 @@ public class AppState {
     jd.setVisible(true);
   }
 
-  /**
-   * Private no-args constructor for ensuring against instantiation.
-   */
-  private AppState() {
-  }
-  private static final List<AppStateListener> listeners = new ArrayList();
-
-  public static Project getCurrentProject() {
-    return curProject;
-  }
-
   public static void setCurrentProject(Project project) {
-    synchronized (lock) {
+    synchronized (LOCK) {
       curProject = project;
-      notifyListeners();
-      IOExport.saveProject(project);
+      fireStateChanged();
     }
   }
 
-  public static void addListener(AppStateListener listener) {
-    listeners.add(listener);
+  public static void addStateListener(AppStateListener listener) {
+    synchronized (LOCK) {
+      stateListeners.add(listener);
+    }
   }
 
-  public static boolean removeListener(AppStateListener listener) {
-    return listeners.remove(listener);
+  public static boolean removeStateListener(AppStateListener listener) {
+    synchronized (listener) {
+      return stateListeners.remove(listener);
+    }
   }
 
-  private static void notifyListeners() {
-    synchronized (lock) {
-      for (AppStateListener listener : listeners) {
+  public static void addAssetListener(AssetListener listener) {
+    synchronized (LOCK) {
+      assetListeners.add(listener);
+    }
+  }
+
+  public static boolean removeAssetListener(AssetListener listener) {
+    synchronized (listener) {
+      return assetListeners.remove(listener);
+    }
+  }
+
+  private static void fireStateChanged() {
+    synchronized (LOCK) {
+      for (AppStateListener listener : stateListeners) {
         listener.stateChanged(curProject);
+      }
+    }
+  }
+
+  public static void fireAssetAdded(AssetType type, File asset) {
+    synchronized (LOCK) {
+      for (AssetListener listener : assetListeners) {
+        listener.assetAdded(type, asset);
       }
     }
   }

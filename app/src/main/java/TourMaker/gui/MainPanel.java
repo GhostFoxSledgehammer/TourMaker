@@ -10,8 +10,8 @@ import javax.swing.JPanel;
  */
 public final class MainPanel extends JPanel {
 
-  private final WelcomeScreen welcomeScreen;
-  private final ProjectPanel projectPanel;
+  private WelcomeScreen welcomeScreen;
+  private ProjectPanel projectPanel;
 
   public MainPanel() {
     welcomeScreen = new WelcomeScreen();
@@ -21,7 +21,6 @@ public final class MainPanel extends JPanel {
 
   public void displayWelcomeScreen() {
     removeAll();
-    setLayout(new BorderLayout());
     add(welcomeScreen, BorderLayout.CENTER);
     revalidate();
   }
@@ -29,7 +28,12 @@ public final class MainPanel extends JPanel {
   public void displayProjectScreen() {
     removeAll();
     setLayout(new BorderLayout());
+    projectPanel = new ProjectPanel();
     add(projectPanel, BorderLayout.CENTER);
     revalidate();
+  }
+
+  public ProjectPanel getProjectPanel() {
+    return projectPanel;
   }
 }
