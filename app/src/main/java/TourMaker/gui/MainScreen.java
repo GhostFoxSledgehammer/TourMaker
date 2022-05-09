@@ -3,10 +3,9 @@ package TourMaker.gui;
 
 import TourMaker.AppState;
 import TourMaker.AppStateListener;
-import TourMaker.data.AssetType;
 import TourMaker.data.Project;
 import java.awt.BorderLayout;
-import java.io.File;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
@@ -32,8 +31,9 @@ public class MainScreen extends JFrame implements AppStateListener {
     add(mainPanel, BorderLayout.CENTER);
 
     pack();
-    setVisible(true);
+    setMinimumSize(new Dimension(800, 800));
     setLocationRelativeTo(null);
+    setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     AppState.addStateListener(this);

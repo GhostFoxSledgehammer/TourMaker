@@ -3,11 +3,10 @@ package TourMaker.gui.asset;
 
 import TourMaker.data.AssetType;
 import TourMaker.gui.boilerplate.ColoredButton;
+import TourMaker.gui.boilerplate.WrapLayout;
 import TourMaker.util.Resource;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,8 +18,9 @@ import javax.swing.JPanel;
 public abstract class AssetPanel extends JPanel {
 
   protected AssetPanel() {
-    setLayout(new FlowLayout(FlowLayout.LEFT));
-    setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+    setBackground(Color.orange);
+    setLayout(new WrapLayout(WrapLayout.LEFT));
+    setMinimumSize(new Dimension(500,500));
   }
 
   public abstract AssetType assetType();
@@ -37,6 +37,7 @@ public abstract class AssetPanel extends JPanel {
     protected File asset;
 
     public AssetCard() {
+//      setBackground(Color.PINK);
       setPreferredSize(new Dimension(200, 200));
       viewButton = new ColoredButton(Color.GREEN, true);
       viewButton.setIcon(Resource.getIcon("icons/view.svg").derive(32, 32));

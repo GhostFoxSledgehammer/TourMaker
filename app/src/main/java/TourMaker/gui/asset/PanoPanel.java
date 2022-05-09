@@ -9,6 +9,7 @@ import TourMaker.util.Utils;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -122,7 +123,9 @@ public class PanoPanel extends AssetPanel {
       setLayout(new GridBagLayout());
       GridBagConstraints gbc = new GridBagConstraints();
 
+
       gbc.anchor = GridBagConstraints.CENTER;
+      
       gbc.weightx = 1;
       gbc.weighty = 1;
       gbc.gridwidth = 2;
@@ -133,7 +136,6 @@ public class PanoPanel extends AssetPanel {
       gbc.gridy = 1;
       JLabel thumbnailLabel = new JLabel(thumbnail);
       add(thumbnailLabel, gbc);
-
       gbc.gridwidth = 1;
       gbc.gridy = 2;
       add(viewButton, gbc);
