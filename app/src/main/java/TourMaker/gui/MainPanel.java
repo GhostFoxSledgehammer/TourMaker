@@ -15,7 +15,6 @@ public final class MainPanel extends JPanel {
 
   public MainPanel() {
     welcomeScreen = new WelcomeScreen();
-    projectPanel = new ProjectPanel();
     displayWelcomeScreen();
   }
 

@@ -6,6 +6,7 @@ import TourMaker.gui.boilerplate.ColoredButton;
 import TourMaker.gui.boilerplate.WrapLayout;
 import TourMaker.util.Resource;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
 import javax.swing.JButton;
@@ -20,14 +21,27 @@ public abstract class AssetPanel extends JPanel {
   protected AssetPanel() {
     setBackground(Color.orange);
     setLayout(new WrapLayout(WrapLayout.LEFT));
-    setMinimumSize(new Dimension(500,500));
+    setMinimumSize(new Dimension(500, 500));
   }
 
   public abstract AssetType assetType();
 
-  public abstract void addAsset();
+  public abstract void importAsset();
 
   public abstract void addAsset(File asset);
+
+  protected abstract void deleteAssetCard(AssetCard assetCard);
+
+  public void removeAsset(File asset) {
+    for (Component comp : getComponents()) {
+      if (comp instanceof AssetCard) {
+        if (((AssetCard) comp).asset.equals(asset)) {
+          deleteAssetCard((AssetCard) comp);
+          return;
+        }
+      }
+    }
+  }
 
   protected abstract class AssetCard extends JPanel {
 
@@ -58,22 +72,6 @@ public abstract class AssetPanel extends JPanel {
     protected abstract void showAssetGUI();
 
     protected abstract void setAsset(File asset);
-  }
-
-  protected class NewCard extends JPanel {
-
-    protected final JButton addButton;
-
-    public NewCard() {
-      addButton = new ColoredButton(Color.GRAY, true);
-      addButton.setIcon(Resource.getIcon("icons/plus.svg").derive(200, 200));
-      addButton.addActionListener(e -> {
-        addAsset();
-      });
-
-      add(addButton);
-    }
-
   }
 
 }

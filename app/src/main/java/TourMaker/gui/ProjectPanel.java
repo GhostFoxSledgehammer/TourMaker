@@ -10,6 +10,7 @@ import TourMaker.gui.asset.ImagePanel;
 import TourMaker.gui.asset.PanoPanel;
 import TourMaker.gui.asset.PdfPanel;
 import TourMaker.gui.asset.VideoPanel;
+import TourMaker.gui.graph.SequencePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,6 +33,7 @@ public class ProjectPanel extends JPanel implements AssetListener{
   private final AssetPanel audioPanel;
   private final AssetPanel pdfPanel;
   private final JPanel settingPanel;
+  private final SequencePanel sequencePanel;
 
   public ProjectPanel() {
     setBackground(Color.BLUE);
@@ -45,7 +47,11 @@ public class ProjectPanel extends JPanel implements AssetListener{
     audioPanel = new AudioPanel();
     pdfPanel = new PdfPanel();
     settingPanel = new SettingsPanel();
+    sequencePanel = new SequencePanel(AppState.getCurrentProject());
+    JScrollPane jsp = new JScrollPane(sequencePanel);
+//    jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
+    leftPane.addTab("Sequences", jsp);
     leftPane.addTab("Panoramas", new JScrollPane(panoramaPanel));
     leftPane.addTab("Hotspots", new JScrollPane(hotspotPanel));
     leftPane.addTab("Image Assets", new JScrollPane(imagePanel));
@@ -81,5 +87,10 @@ public class ProjectPanel extends JPanel implements AssetListener{
   @Override
   public void assetAdded(AssetType type, File Asset) {
     getPanel(type).addAsset(Asset);
+  }
+
+  @Override
+  public void assetRemoved(AssetType type, File Asset) {
+     getPanel(type).removeAsset(Asset);
   }
 }

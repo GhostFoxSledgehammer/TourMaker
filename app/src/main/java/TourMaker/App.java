@@ -5,12 +5,17 @@ package TourMaker;
 
 import TourMaker.gui.MainScreen;
 import TourMaker.util.LAFUtil;
+import javax.swing.UIManager;
 
 public class App {
 
   public static void main(String[] args) {
     LAFUtil.initialize();
-    
+    UIManager.put("Button.arc", 999);
+    UIManager.put("Component.arc", 999);
+    UIManager.put("ProgressBar.arc", 999);
+    UIManager.put("TextComponent.arc", 999);
+    AssetTracker.getInstance();
     MainScreen.getInstance();
   }
 }

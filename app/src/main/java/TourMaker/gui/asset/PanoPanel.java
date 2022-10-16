@@ -1,15 +1,16 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui.asset;
 
+import TourMaker.AppState;
 import TourMaker.data.AssetType;
 import TourMaker.gui.MainScreen;
+import TourMaker.gui.boilerplate.NewCard;
 import TourMaker.util.AssetUtil;
 import TourMaker.util.IOImport;
 import TourMaker.util.Utils;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -51,13 +52,19 @@ public class PanoPanel extends AssetPanel {
   }
 
   private NewCard addNewCard() {
-    NewCard newCard = new NewCard();
+    NewCard newCard = new NewCard() {
+      @Override
+      public void onClick() {
+        importAsset();
+      }
+    };
     add(newCard);
     revalidate();
     return newCard;
   }
 
-  private void deleteAssetCard(AssetCard assetCard) {
+  @Override
+  protected void deleteAssetCard(AssetCard assetCard) {
     remove(assetCard);
     revalidate();
   }
@@ -69,7 +76,7 @@ public class PanoPanel extends AssetPanel {
   }
 
   @Override
-  public void addAsset() {
+  public void importAsset() {
     List<FileFilter> filterList = Utils.getFilterList(assetType());
     JFileChooser jfc = new JFileChooser();
     jfc.setAcceptAllFileFilterUsed(false);
@@ -82,7 +89,7 @@ public class PanoPanel extends AssetPanel {
       File imageFile = jfc.getSelectedFile();
       File copiedFile = IOImport.copyFile(imageFile, assetType());
       if (copiedFile != null) {
-        addAsset(copiedFile);
+        AppState.fireAssetAdded(AssetType.Panorama, copiedFile);
       }
     }
   }
@@ -91,7 +98,7 @@ public class PanoPanel extends AssetPanel {
 
     @Override
     public void deleteAsset() {
-      deleteAssetCard(this);
+      AppState.fireAssetDeleted(AssetType.Image, asset);
       AssetUtil.deleteAsset(asset);
     }
 

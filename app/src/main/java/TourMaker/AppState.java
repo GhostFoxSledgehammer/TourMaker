@@ -125,4 +125,13 @@ public class AppState {
       }
     }
   }
+  
+
+  public static void fireAssetDeleted(AssetType assetType, File asset) {
+    synchronized (LOCK) {
+      for (AssetListener listener : assetListeners) {
+        listener.assetRemoved(assetType, asset);
+      }
+    }
+  }
 }

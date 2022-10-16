@@ -72,14 +72,23 @@ public class IOImport {
       Element tour = doc.getDocumentElement();
 
       String description = "Virtual Tour";
+      String minimap = "minimap Image";
       NodeList nameList = tour.getElementsByTagName("Name");
       if (nameList.getLength() > 0) {
         description = nameList.item(0).getTextContent();
       } else {
         Logger.getLogger(IOImport.class.getName()).log(Level.SEVERE, "Tour name not found : {0}", absoluteFile);
       }
+      NodeList minimapList = tour.getElementsByTagName("MiniMap");
+      if (minimapList.getLength() > 0) {
+        minimap = minimapList.item(0).getTextContent();
+      } else {
+        Logger.getLogger(IOImport.class.getName()).log(Level.SEVERE, "Tour name not found : {0}", absoluteFile);
+      }
+
       String dir = projectFile.getParent();
       project = new Project(dir, description);
+      project.setMinimap(minimap);
 
       NodeList sequenceList = tour.getElementsByTagName("Sequence");
       for (int i = 0; i < sequenceList.getLength(); i++) {

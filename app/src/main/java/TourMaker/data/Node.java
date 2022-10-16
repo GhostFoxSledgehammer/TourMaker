@@ -2,7 +2,6 @@
 package TourMaker.data;
 
 import TourMaker.hotspot.Hotspot;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +12,13 @@ import java.util.List;
 public class Node {
 
   private Point pos;
-  private final String name;
+  private String name;
   private final String imageName;
   private final List<Hotspot> hotspots;
+
+  public void setPos(Point pos) {
+    this.pos = pos;
+  }
 
   public Node(Point p, String name, String imageName) {
     pos = p;
@@ -46,5 +49,9 @@ public class Node {
   
   public void deleteHotspot(Hotspot hotspot) {
     hotspots.remove(hotspot);
+  }
+  
+  public void setName(String name) {
+    this.name = name;
   }
 }

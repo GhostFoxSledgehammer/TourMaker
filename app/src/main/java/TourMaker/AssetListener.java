@@ -11,4 +11,6 @@ import java.io.File;
 public interface AssetListener {
   
   public void assetAdded(AssetType type, File Asset);
+  
+  public void assetRemoved(AssetType type, File Asset);
 }

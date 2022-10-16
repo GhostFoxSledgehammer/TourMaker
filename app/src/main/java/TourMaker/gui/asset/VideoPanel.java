@@ -1,7 +1,9 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui.asset;
 
+import TourMaker.AppState;
 import TourMaker.data.AssetType;
+import TourMaker.gui.boilerplate.NewCard;
 import TourMaker.util.AssetUtil;
 import TourMaker.util.IOImport;
 import TourMaker.util.Resource;
@@ -43,13 +45,19 @@ public class VideoPanel extends AssetPanel {
   }
 
   private NewCard addNewCard() {
-    NewCard newCard = new NewCard();
+    NewCard newCard = new NewCard() {
+      @Override
+      public void onClick() {
+        importAsset();
+      }
+    };
     add(newCard);
     revalidate();
     return newCard;
   }
 
-  private void deleteAssetCard(AssetCard assetCard) {
+  @Override
+  protected void deleteAssetCard(AssetCard assetCard) {
     remove(assetCard);
     revalidate();
   }
@@ -61,7 +69,7 @@ public class VideoPanel extends AssetPanel {
   }
 
   @Override
-  public void addAsset() {
+  public void importAsset() {
     List<FileFilter> filterList = Utils.getFilterList(assetType());
     JFileChooser jfc = new JFileChooser();
     jfc.setAcceptAllFileFilterUsed(false);
@@ -74,7 +82,7 @@ public class VideoPanel extends AssetPanel {
       File imageFile = jfc.getSelectedFile();
       File copiedFile = IOImport.copyFile(imageFile, assetType());
       if (copiedFile != null) {
-        addAsset(copiedFile);
+        AppState.fireAssetAdded(AssetType.Video, copiedFile);
       }
     }
   }
@@ -83,7 +91,7 @@ public class VideoPanel extends AssetPanel {
 
     @Override
     public void deleteAsset() {
-      deleteAssetCard(this);
+      AppState.fireAssetDeleted(AssetType.Video, asset);
       AssetUtil.deleteAsset(asset);
     }
 
@@ -105,7 +113,7 @@ public class VideoPanel extends AssetPanel {
       GridBagConstraints gbc = new GridBagConstraints();
 
       gbc.anchor = GridBagConstraints.CENTER;
-      
+
       gbc.weightx = 1;
       gbc.weighty = 1;
       gbc.gridwidth = 2;

@@ -10,8 +10,13 @@ import java.util.List;
  */
 public class Project {
   private final String dir;
-  private final String description;
+  private String description;
   private final List<Sequence> sequences;
+  private String minimapImage = new String();
+
+  public String getMinimapImage() {
+    return minimapImage;
+  }
   
   public Project(String dir) {
     this(dir, "Virtual Tour");
@@ -37,5 +42,13 @@ public class Project {
 
   public void addSequence(Sequence seq) {
     sequences.add(seq);
+  }
+
+  public void setDescription(String text) {
+    this.description = text;
+  }
+
+  public void setMinimap(String imageName) {
+    this.minimapImage = imageName;
   }
 }

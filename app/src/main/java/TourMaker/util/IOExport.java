@@ -46,6 +46,10 @@ public class IOExport {
       Element name = doc.createElement("Name");
       name.appendChild(doc.createTextNode(project.description()));
       tour.appendChild(name);
+      
+      Element minimapElement = doc.createElement("MiniMap");
+      minimapElement.appendChild(doc.createTextNode(project.getMinimapImage()));
+      tour.appendChild(minimapElement);
 
       for (int i = 0; i < project.getSequences().size(); i++) {
         Sequence seq = project.getSequences().get(i);

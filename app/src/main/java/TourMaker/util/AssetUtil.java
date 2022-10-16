@@ -4,7 +4,6 @@ package TourMaker.util;
 import TourMaker.AppState;
 import TourMaker.data.AssetType;
 import TourMaker.data.Project;
-import TourMaker.gui.MainScreen;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +33,13 @@ public class AssetUtil {
       return false;
     }
     return asset.delete();
+  }
+
+  public static File getAssset(Project project, AssetType type, String assetName) {
+    String dir = project.dir();
+    String folderPath = dir.concat("/").concat(type.name());
+    String filePath = folderPath.concat("/").concat(assetName);
+    return new File(filePath);
   }
 
   public static void loadAllAsssets(Project project) {
