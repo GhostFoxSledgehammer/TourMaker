@@ -62,4 +62,13 @@ public class Utils {
         return null;
     }
   }
+
+  public static String getShortName(String fileName) {
+    if (fileName.length() <= 20) {
+      return fileName;
+    }
+    String extension = fileName.substring(fileName.lastIndexOf("."));
+    String name = fileName.substring(0, fileName.lastIndexOf("."));
+    return name.substring(0, 5) + "..." + name.substring(name.length() - 4) + extension;
+  }
 }

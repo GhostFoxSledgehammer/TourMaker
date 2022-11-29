@@ -31,7 +31,7 @@ public class CreateProject extends JPanel {
 
   public CreateProject(JDialog jd) {
     parentDialog = jd;
-    
+
     projectDescriptionLabel = new JLabel("Project Description:");
     projectDirLabel = new JLabel("Project Location:");
     projectDescriptionField = new JTextField(25);
@@ -48,8 +48,7 @@ public class CreateProject extends JPanel {
     createButton.addActionListener((ActionEvent e) -> {
       String projectDescription = projectDescriptionField.getText();
       String projectDirectory = projectDirField.getText();
-      Project project = new Project(projectDirectory, projectDescription);
-      setCurrentProject(project);
+      setCurrentProject(projectDirectory, projectDescription);
       parentDialog.dispose();
     });
 

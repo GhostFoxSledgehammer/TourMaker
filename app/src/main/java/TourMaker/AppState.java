@@ -46,7 +46,7 @@ public class AppState {
   }
 
   public static void openProject() {
-    Project  project = null;
+    Project project = null;
     JFileChooser fc = new JFileChooser();
     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
     fc.setMultiSelectionEnabled(false);
@@ -57,7 +57,7 @@ public class AppState {
       if (project == null) {
         String message = "Error opening project file : " + projectFile.getAbsolutePath();
         JOptionPane.showMessageDialog(MainScreen.getInstance(), message, "IO Error",
-        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
         return;
       }
       setCurrentProject(project);
@@ -79,9 +79,15 @@ public class AppState {
     jd.setVisible(true);
   }
 
+  public static void setCurrentProject(String projectDirectory, String projectDescription) {
+    Project project = new Project(projectDirectory, projectDescription);
+    setCurrentProject(project);
+  }
+
   public static void setCurrentProject(Project project) {
     synchronized (LOCK) {
       curProject = project;
+      save();
       fireStateChanged();
     }
   }
@@ -125,7 +131,6 @@ public class AppState {
       }
     }
   }
-  
 
   public static void fireAssetDeleted(AssetType assetType, File asset) {
     synchronized (LOCK) {

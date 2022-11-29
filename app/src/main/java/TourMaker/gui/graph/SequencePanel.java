@@ -1,6 +1,8 @@
 // License: GPL. For details, see LICENSE file.
 package TourMaker.gui.graph;
 
+import TourMaker.gui.boilerplate.DragListener;
+import TourMaker.gui.boilerplate.KeySelectionRenderer;
 import TourMaker.AssetTracker;
 import TourMaker.data.AssetType;
 import TourMaker.data.Node;
@@ -12,6 +14,7 @@ import TourMaker.gui.boilerplate.ColoredButton;
 import TourMaker.gui.boilerplate.NewCard;
 import TourMaker.hotspot.Hotspot;
 import TourMaker.util.Resource;
+import static TourMaker.util.Utils.getShortName;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +28,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -46,6 +48,7 @@ public class SequencePanel extends JPanel {
   private final Project project;
   private final NewCard newCard;
   private final List<SequenceCard> cards = new ArrayList();
+  private DragListener drag = new DragListener();
 
   public SequencePanel(Project project) {
     this.project = project;
@@ -73,13 +76,13 @@ public class SequencePanel extends JPanel {
     removeAll();
 
     add(newCard, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-      new Insets(10, 10, 10, 10), 0, 0));
+            new Insets(10, 10, 10, 10), 0, 0));
 
     for (int i = 0; i < cards.size(); i++) {
       SequenceCard sqc = cards.get(i);
       sqc.refresh();
       add(new JScrollPane(sqc), new GridBagConstraints(0, i + 1, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-        new Insets(10, 10, 10, 10), 0, 0));
+              new Insets(10, 10, 10, 10), 0, 0));
     }
     revalidate();
     repaint();
@@ -107,14 +110,26 @@ public class SequencePanel extends JPanel {
     private final NewCard newCard;
     private final Sequence seq;
     private final JButton deleteButton;
+    private final JButton editNameButton;
 
     private SequenceCard(Sequence seq) {
       this.seq = seq;
       deleteButton = new ColoredButton(Color.RED);
-      deleteButton.setText("Delete Sequence");
+//      deleteButton.setText("Delete Sequence");
       deleteButton.setIcon(Resource.getIcon("icons/delete.svg").derive(32, 32));
       deleteButton.addActionListener(e -> {
         deleteSequence(this);
+      });
+
+      editNameButton = new ColoredButton(Color.BLUE);
+      editNameButton.setText("Edit Name");
+      editNameButton.setIcon(Resource.getIcon("icons/edit.svg").derive(32, 32));
+      editNameButton.addActionListener(e -> {
+        String name = JOptionPane.showInputDialog(editNameButton, "Enter new name");
+        if (name != null) {
+          this.seq.setName(name);
+          refresh();
+        }
       });
       root = new JPanel();
       root.setLayout(new BoxLayout(root, BoxLayout.X_AXIS));
@@ -127,12 +142,13 @@ public class SequencePanel extends JPanel {
       root.add(newCard);
 
       seq.getNodes().forEach(node -> root.add(new NodeCard(node)));
-      seqNameLabel = new JTextField(seq.getName());
-
+      seqNameLabel = new JTextField(getShortName(seq.getName()));
+      seqNameLabel.setEditable(false);
 //      setBackground(Color.GREEN.darker());
       JPanel jp = new JPanel();
       jp.add(seqNameLabel);
       jp.add(deleteButton);
+      jp.add(editNameButton);
 
       JPanel jp2 = new JPanel();
       jp2.setLayout(new BorderLayout());
@@ -179,24 +195,43 @@ public class SequencePanel extends JPanel {
 
       private final JButton editPositioButton;
       private final JButton deleteButton;
+      private final JButton editNameButton;
 
       private final Node node;
 
       private NodeCard(Node node) {
         this.node = node;
         deleteButton = new ColoredButton(Color.RED);
-        deleteButton.setText("Delete Node");
+//        deleteButton.setText("Delete Node");
         deleteButton.setIcon(Resource.getIcon("icons/delete.svg").derive(32, 32));
         deleteButton.addActionListener(e -> {
           deleteNode(this);
         });
-        nameField = new JTextField(20);
+
+        editNameButton = new ColoredButton(Color.BLUE);
+        editNameButton.setText("Edit Name");
+        editNameButton.setIcon(Resource.getIcon("icons/edit.svg").derive(32, 32));
+        editNameButton.addActionListener(e -> {
+          String name = JOptionPane.showInputDialog(editNameButton, "Enter new name");
+          if (name != null) {
+            this.node.setName(name);
+            refresh();
+          }
+        });
+        nameField = new JTextField(10);
         nameField.setMinimumSize(nameField.getPreferredSize());
         positionLabel = new JLabel("Position :");
         positionValueLabel = new JLabel("(0.5,0.5)");
         imageLabel = new JLabel("Image :");
         hotspotLabel = new JLabel("Hotspots :");
-        selectImage = new JComboBox<>();
+        selectImage = new JComboBox();
+
+        KeySelectionRenderer keySelectionRenderer = new KeySelectionRenderer(selectImage) {
+          @Override
+          public String getDisplayValue(Object value) {
+            return getShortName(value.toString());
+          }
+        };
 
         hotspotList = new JList<>();
 
@@ -206,19 +241,19 @@ public class SequencePanel extends JPanel {
           refresh();
         });
 
-        nameField.getDocument().addDocumentListener(new DocumentListener() {
-          public void changedUpdate(DocumentEvent e) {
-            warn();
-          }
-
-          public void removeUpdate(DocumentEvent e) {
-            warn();
-          }
-
-          public void insertUpdate(DocumentEvent e) {
-            warn();
-          }
-        });
+//        nameField.getDocument().addDocumentListener(new DocumentListener() {
+//          public void changedUpdate(DocumentEvent e) {
+//            warn();
+//          }
+//
+//          public void removeUpdate(DocumentEvent e) {
+//            warn();
+//          }
+//
+//          public void insertUpdate(DocumentEvent e) {
+//            warn();
+//          }
+//        });
         refresh();
 
         setLayout(new GridBagLayout());
@@ -231,14 +266,18 @@ public class SequencePanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
 //      gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 1;
         gbc.gridy = 0;
         gbc.gridx = 0;
-
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
         add(nameField, gbc);
+        gbc.gridx++;
+        add(editNameButton, gbc);
 
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.gridy++;
         add(positionLabel, gbc);
@@ -281,7 +320,7 @@ public class SequencePanel extends JPanel {
       }
 
       private void refresh() {
-        nameField.setText(node.getName());
+        nameField.setText(getShortName(node.getName()));
         positionValueLabel.setText(node.getPosition().toString());
         selectImage.removeAllItems();
         for (String pano : AssetTracker.getInstance().getAssets(AssetType.Panorama)) {
@@ -292,6 +331,7 @@ public class SequencePanel extends JPanel {
       public void warn() {
         node.setName(nameField.getText());
       }
+
     }
   }
 

@@ -9,6 +9,8 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+     id "io.sitoolkit.cv.sit-cv-gradle-plugin" version "1.1.1"
+    
 }
 
 sourceCompatibility = 1.8
@@ -18,7 +20,11 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
-
+test {
+  testLogging {
+    showStandardStreams = true
+  }
+}
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'

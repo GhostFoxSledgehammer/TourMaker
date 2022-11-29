@@ -9,16 +9,20 @@ import java.util.List;
  * @author Kishan Tripathi
  */
 public class Sequence {
-  private final String name;
+  private String name;
   private final List<Node> nodes;
   
-  public Sequence(String nname) {
-    name = nname;
+  public Sequence(String name) {
+    this.name = name;
     nodes = new ArrayList<>();
   }
 
   public String getName() {
     return name;
+  }
+  
+  public void setName(String newName) {
+    name = newName;
   }
 
   public List<Node> getNodes() {
